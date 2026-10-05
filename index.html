@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors - First to Five</title>
+  <meta name="description" content="An animated first-to-five Rock, Paper, Scissors game. Choose your move, challenge the computer, and reach 5 victories to win!">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✊</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand-row">
+        <div class="badge-tag">CHALLENGE MODE</div>
+        <button id="sound-toggle" class="icon-button" aria-label="Toggle Sound" title="Toggle Sound">
+          <svg class="sound-on-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <svg class="sound-off-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+      </div>
+      <h1 class="title">ROCK PAPER SCISSORS</h1>
+      <p class="subtitle" id="target-label">FIRST TO <span class="highlight">5</span> WINS THE MATCH</p>
+      
+      <!-- Target Mode Select -->
+      <div class="mode-bar">
+        <label for="target-score-select">Goal:</label>
+        <select id="target-score-select" aria-label="Winning target score">
+          <option value="3">First to 3</option>
+          <option value="5" selected>First to 5 (Classic)</option>
+          <option value="10">First to 10</option>
+          <option value="999">Endless Mode</option>
+        </select>
+      </div>
+    </header>
+
+    <!-- Scoreboard -->
+    <section class="scoreboard" aria-label="Scoreboard">
+      <div class="score-card player-score-box">
+        <div class="score-meta">
+          <span class="player-tag">YOU</span>
+          <span class="hot-streak" id="streak-indicator" style="display: none;">🔥 Streak: 0</span>
+        </div>
+        <div class="score-number" id="player-score">0</div>
+      </div>
+      
+      <div class="score-divider">
+        <div class="round-badge" id="round-counter">ROUND 1</div>
+        <span class="vs-text">VS</span>
+      </div>
+
+      <div class="score-card computer-score-box">
+        <div class="score-meta">
+          <span class="player-tag">COMPUTER</span>
+          <span class="cpu-model">AI BOT</span>
+        </div>
+        <div class="score-number" id="computer-score">0</div>
+      </div>
+    </section>
+
+    <!-- Status Banner -->
+    <div class="status-wrapper">
+      <div class="status-banner" id="status-message" role="status" aria-live="polite">
+        Choose your move to begin.
+      </div>
+    </div>
+
+    <!-- Arena Section -->
+    <section class="arena" aria-label="Match Arena">
+      <!-- Player Move Card -->
+      <div class="move-card player-card" id="player-card">
+        <div class="card-header">YOUR MOVE</div>
+        <div class="card-display">
+          <div class="card-icon" id="player-icon">?</div>
+          <div class="card-label" id="player-label">READY</div>
+        </div>
+      </div>
+
+      <div class="arena-center">
+        <div class="vs-emblem">VS</div>
+      </div>
+
+      <!-- Computer Move Card -->
+      <div class="move-card computer-card" id="computer-card">
+        <div class="card-header">COMPUTER</div>
+        <div class="card-display">
+          <div class="card-icon" id="computer-icon">?</div>
+          <div class="card-label" id="computer-label">WAITING</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls Section -->
+    <section class="controls" aria-label="Game Controls">
+      <p class="controls-heading">MAKE YOUR CHOICE</p>
+      <div class="buttons-grid">
+        <button class="choice-btn btn-rock" id="btn-rock" data-move="rock" aria-label="Choose Rock (Keyboard shortcut: 1 or R)">
+          <span class="btn-emoji">✊</span>
+          <span class="btn-title">ROCK</span>
+          <span class="btn-beats">Beats Scissors</span>
+          <span class="btn-key">[1]</span>
+        </button>
+        <button class="choice-btn btn-paper" id="btn-paper" data-move="paper" aria-label="Choose Paper (Keyboard shortcut: 2 or P)">
+          <span class="btn-emoji">✋</span>
+          <span class="btn-title">PAPER</span>
+          <span class="btn-beats">Beats Rock</span>
+          <span class="btn-key">[2]</span>
+        </button>
+        <button class="choice-btn btn-scissors" id="btn-scissors" data-move="scissors" aria-label="Choose Scissors (Keyboard shortcut: 3 or S)">
+          <span class="btn-emoji">✌</span>
+          <span class="btn-title">SCISSORS</span>
+          <span class="btn-beats">Beats Paper</span>
+          <span class="btn-key">[3]</span>
+        </button>
+      </div>
+
+      <div class="action-footer">
+        <button id="reset-match-btn" class="reset-button" aria-label="Start a new match">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          New match
+        </button>
+      </div>
+    </section>
+
+    <!-- Match History Drawer / Section -->
+    <section class="history-panel" aria-label="Match History">
+      <div class="history-header">
+        <span class="history-title">Round History</span>
+        <span class="history-stats" id="history-summary">Total: 0 | Wins: 0 | Draws: 0 | Losses: 0</span>
+      </div>
+      <div class="history-list" id="history-list">
+        <div class="empty-history">Rounds will appear here as you play.</div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Python script also available for desktop & CLI: <code>python rock_paper_scissors.py</code></p>
+    </footer>
+  </div>
+
+  <!-- Win/Loss Overlay Modal -->
+  <div class="modal-overlay" id="match-modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-badge" id="modal-badge">🏆 MATCH COMPLETED</div>
+      <h2 class="modal-headline" id="modal-headline">MATCH WON!</h2>
+      <p class="modal-description" id="modal-description">You reached 5 wins. Outstanding strategy!</p>
+      <div class="modal-stats" id="modal-stats"></div>
+      <button class="modal-action-btn" id="modal-play-again-btn">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="game.js"></script>
+</body>
+</html>
